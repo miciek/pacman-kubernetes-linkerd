@@ -34,8 +34,8 @@ spec:
         - "pacman.prod"
       containers:
       - name: backend
-        image: pacman-backend:v1
-        imagePullPolicy: Never
+        image: docker.io/miciek/pacman-backend:v1
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
 ---

@@ -72,4 +72,4 @@ spec:
   - name: http
     port: 4140
     targetPort: 4140
-  externalIPs: ["192.168.99.100"]
+  externalIPs: ["192.168.99.100"] # use output of `minikube ip` command here
