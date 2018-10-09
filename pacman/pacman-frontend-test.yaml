@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: frontend-test
+  name: frontend-test
+  namespace: pacman
+spec:
+  ports:
+  - port: 5000
+    name: http
+    targetPort: 5000
+  selector:
+    app: frontend-test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-test
+  namespace: pacman
+spec:
+  selector:
+    matchLabels:
+      app: frontend-test
+  template:
+    metadata:
+      labels:
+        app: frontend-test
+      namespace: pacman
+    spec:
+      containers:
+      - name: frontend
+        image: docker.io/miciek/pacman-frontend:v2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---

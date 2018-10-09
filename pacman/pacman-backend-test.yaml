@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: backend-test
+  name: backend-test
+  namespace: pacman
+spec:
+  ports:
+  - port: 8080
+    name: http
+    targetPort: 8080
+  selector:
+    app: backend-test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-test
+  namespace: pacman
+spec:
+  selector:
+    matchLabels:
+      app: backend-test
+  template:
+    metadata:
+      labels:
+        app: backend-test
+      namespace: pacman
+    spec:
+      hostAliases:
+      - ip: "192.168.99.100"
+        hostnames:
+        - "pacman.prod"
+      containers:
+      - name: backend
+        image: pacman-backend:v2
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+---

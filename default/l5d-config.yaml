@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: l5d-config
+  namespace: default
+data:
+  config.yaml: |-
+    admin:
+      ip: 0.0.0.0
+      port: 9990
+
+    namers:
+    - kind: io.l5d.k8s
+
+    telemetry:
+    - kind: io.l5d.prometheus # Expose Prometheus style metrics on :9990/admin/metrics/prometheus
+    - kind: io.l5d.recentRequests
+      sampleRate: 0.01
+
+    routers:
+    - label: router
+      protocol: http
+      identifier:
+        kind: io.l5d.methodAndHost
+        httpUriInDst: true
+      servers:
+      - port: 4140
+        ip: 0.0.0.0
+      dtab: |
+        /k8s => /#/io.l5d.k8s ;
+        /uri/pacman.prod:4140 => /k8s/pacman/http/frontend ;
+        /uri/pacman.prod:4140/backend => /k8s/pacman/http/backend ;
+        /uri/pacman.prod:4140/collectibles => /k8s/pacman/http/collectibles ;
+        /svc/1.1/GET => /uri ;
+        /svc/1.1/PUT => /uri ;
+        /svc/1.1/POST => /uri ;
