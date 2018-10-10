@@ -29,7 +29,7 @@ spec:
       namespace: pacman
     spec:
       hostAliases:
-      - ip: "192.168.99.100"
+      - ip: "192.168.99.100" # use output of `minikube ip` command here
         hostnames:
         - "pacman.prod"
       containers:
@@ -38,4 +38,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        env:
+        - name: COLLECTIBLES_URI
+          value: "http://pacman.prod:4140/collectibles"
 ---
